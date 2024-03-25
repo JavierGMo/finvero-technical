@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { MainNav } from "./components/layouts/main-nav";
 import dynamic from "next/dynamic";
+import StoreProvider from "@/providers/store-provider";
+import { Toaster } from "./components/ui/toastet";
 
 const AuthProvider = dynamic(() => import("@/providers/auth-provider"), {
   ssr: false,
@@ -24,7 +26,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <MainNav>{children}</MainNav>
+          <StoreProvider>
+            <MainNav>{children}</MainNav>
+            <Toaster />
+          </StoreProvider>
         </AuthProvider>
       </body>
     </html>

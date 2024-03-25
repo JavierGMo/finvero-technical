@@ -12,3 +12,36 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id              Int               @id @default(autoincrement())
+  fisrtName       String
+  lastName        String
+  email           String            @unique
+  password        String
+  checkoutProduct CheckoutProduct[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model Product {
+  id                Int              @id @default(autoincrement())
+  name              String
+  image             String?
+  description       String?
+  price             Float
+  checkoutProductFk Int?
+  checkoutProduct   CheckoutProduct? @relation(fields: [checkoutProductFk], references: [id])
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+}
+
+model CheckoutProduct {
+  id        Int       @id @default(autoincrement())
+  total     Float
+  userFk    Int
+  user      User      @relation(fields: [userFk], references: [id])
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}

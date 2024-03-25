@@ -8,16 +8,27 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import Image from "next/image";
+import noImage from "@/assets/images/no-image.jpg";
 
 interface ProductCardProps extends Product {}
 
-export const ProductCard = ({ id, title, price }: ProductCardProps) => {
+export const ProductCard = ({ id, name, price, image }: ProductCardProps) => {
+  const saveIncart = async () => {};
   return (
     <Card className="w-full">
       <CardHeader>
-        <p className="font-medium">{title}</p>
+        <Image
+          src={image ? image : noImage.src}
+          alt={name ?? "-"}
+          width={0}
+          height={0}
+          sizes="100vw"
+          style={{ width: "100%", height: "100%" }}
+        />
       </CardHeader>
       <CardContent>
+        <p className="font-medium">{name}</p>
         <p>${price}</p>
       </CardContent>
       <CardFooter className="flex justify-between">
@@ -25,7 +36,7 @@ export const ProductCard = ({ id, title, price }: ProductCardProps) => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button>
+              <Button onClick={() => {}}>
                 <ShoppingCart />
               </Button>
             </TooltipTrigger>

@@ -5,4 +5,9 @@ export interface Session {
   user?: User;
 }
 
+export interface AuthenticatedUser {
+  user: User;
+  token: string;
+}
+
 export type StatusSession = "unauth" | "auth" | "loading";

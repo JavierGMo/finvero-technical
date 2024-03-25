@@ -9,6 +9,8 @@ import {
 } from "../ui/dropdown-menu";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Icons } from "../icons";
 
 export const AppAuthenticate = () => {
   return (
@@ -25,7 +27,7 @@ export const AppAuthenticate = () => {
           </Link>
         </div>
         <div>
-          <Link href="/sign-up" className={buttonVariants({})}>
+          <Link href="/register" className={buttonVariants({})}>
             Registrarse
           </Link>
         </div>
@@ -33,15 +35,24 @@ export const AppAuthenticate = () => {
       <div className="md:hidden lg:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <p>J</p>
+            <Avatar>
+              <AvatarFallback>
+                <Icons.user className="w-full h-full" />
+              </AvatarFallback>
+            </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href="/login">Iniciar sesión</Link>
+              <Link
+                href="/login"
+                className={buttonVariants({ variant: "outline" })}
+              >
+                Iniciar sesión
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/sign-up" className={buttonVariants({})}>
+              <Link href="/register" className={buttonVariants({})}>
                 Registrarse
               </Link>
             </DropdownMenuItem>

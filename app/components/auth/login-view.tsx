@@ -9,7 +9,14 @@ import {
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { RegexMail } from "@/constants/regexs";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Icons } from "../icons";
+import { CardAuth } from "./card-auth";
+import { loginService } from "@/services/auth";
+import { AuthContext } from "@/providers/auth-provider";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/useToast";
 
 export const LoginView = () => {
   const [values, setValues] = useState({
@@ -18,23 +25,36 @@ export const LoginView = () => {
   });
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isValidPassword, setIsValidPassword] = useState(true);
+  const { setSession } = useContext(AuthContext);
+  const router = useRouter();
+  const { toast } = useToast();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("e", e);
     const isValidEmail = RegexMail.test(values.email);
-    console.log("values", values, RegexMail.test(values.email), isValidEmail);
 
     if (!isValidEmail) {
-      console.log("no es un emial valido");
       setIsValidEmail(false);
       return;
     }
+    Promise.resolve(loginService(values.email, values.password))
+      .then((session) => {
+        console.log("authasdhas das", session);
+
+        setSession({
+          user: session.user,
+          token: session.token,
+        });
+        toast({
+          title: "Inicio de sesión exitosa",
+        });
+        router.push("/");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
   return (
-    <Card className="sm:mx-auto w-full  sm:max-w-sm">
-      <CardHeader className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <div className="flex justify-center"></div>
-      </CardHeader>
+    <CardAuth>
       <form onSubmit={handleSubmit}>
         <CardContent>
           <div className="my-2">
@@ -52,7 +72,7 @@ export const LoginView = () => {
               }}
             />
             {!isValidEmail ? (
-              <p className="mt-2 text-sm">Email invalido</p>
+              <p className="text-red-600 mt-2 text-sm">Email invalido</p>
             ) : null}
           </div>
           <div className="my-2">
@@ -70,7 +90,7 @@ export const LoginView = () => {
               }}
             />
             {isValidPassword ? null : (
-              <p className="mt-2 text-sm">Contraseña invalida</p>
+              <p className="text-red-600 mt-2 text-sm">Contraseña invalida</p>
             )}
           </div>
         </CardContent>
@@ -85,6 +105,6 @@ export const LoginView = () => {
           </Button>
         </CardFooter>
       </form>
-    </Card>
+    </CardAuth>
   );
 };

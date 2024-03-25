@@ -2,6 +2,7 @@
 import { ReactNode, useState } from "react";
 import { AppHeader } from "./app-header";
 import { usePathname } from "next/navigation";
+import { CartSheet } from "../checkout/cart-sheet";
 
 interface MainNavProps {
   children: ReactNode;
@@ -16,6 +17,7 @@ export const MainNav = ({ children }: MainNavProps) => {
       <div className={`w-full items-start ${isHome ? "" : "px-3"}`}>
         <main className="flex w-full flex-col overflow-hidden">{children}</main>
       </div>
+      <CartSheet />
     </div>
   );
 };

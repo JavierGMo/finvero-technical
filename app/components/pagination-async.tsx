@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -8,29 +9,39 @@ import {
   PaginationPrevious,
 } from "./ui/pagination";
 
-export const PaginationAsync = () => {
+interface PaginationAsyncProps {
+  hasNext: boolean;
+  page: number;
+  refetch: (page: number) => Promise<void>;
+}
+
+export const PaginationAsync = ({
+  hasNext,
+  page,
+  refetch,
+}: PaginationAsyncProps) => {
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious href="#" />
+          <PaginationPrevious
+            href={page !== 0 ? "#" : undefined}
+            onClick={() => {
+              refetch(page - 1).catch((err) => {
+                console.error(err);
+              });
+            }}
+          />
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#" isActive>
-            2
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext href="#" />
+          <PaginationNext
+            href={hasNext ? "#" : undefined}
+            onClick={() => {
+              refetch(page + 1).catch((err) => {
+                console.error(err);
+              });
+            }}
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
