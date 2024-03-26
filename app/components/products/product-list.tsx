@@ -13,6 +13,7 @@ export const ProductList = ({ products }: ProductListProps) => {
         ? products.map((product, idx) => (
             <ProductCard
               key={`${product.name}-${idx}`}
+              id={product.id}
               name={product.name}
               price={product.price}
               image={product.image}

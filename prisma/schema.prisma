@@ -25,23 +25,23 @@ model User {
 }
 
 model Product {
-  id                Int              @id @default(autoincrement())
-  name              String
-  image             String?
-  description       String?
-  price             Float
-  checkoutProductFk Int?
-  checkoutProduct   CheckoutProduct? @relation(fields: [checkoutProductFk], references: [id])
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
+  id              Int               @id @default(autoincrement())
+  name            String
+  image           String?
+  description     String?
+  price           Float
+  checkoutProduct CheckoutProduct[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
 
 model CheckoutProduct {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   total     Float
   userFk    Int
-  user      User      @relation(fields: [userFk], references: [id])
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  productFk Int
+  user      User     @relation(fields: [userFk], references: [id])
+  product   Product  @relation(fields: [productFk], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

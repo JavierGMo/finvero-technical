@@ -35,6 +35,8 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+Create your .env
+
 PRISMA
 Next steps:
 
@@ -42,3 +44,9 @@ Next steps:
 2. Set the provider of the datasource block in schema.prisma to match your database: postgresql, mysql, sqlite, sqlserver, mongodb or cockroachdb.
 3. Run npx prisma db push to send your database schema.
 4. Run npx prisma generate to generate the Prisma Client. You can then start querying your database.
+
+SET on .env
+
+DATABASE_URL="postgresql://<your_user_db>:<your_password_db>@localhost:5432/finvero?schema=public"
+PRIVATE_KEY="asdhajsk123dassDaasd2da"
+SALT_PASSWORD=10

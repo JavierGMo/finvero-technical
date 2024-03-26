@@ -10,11 +10,44 @@ import {
 } from "../ui/tooltip";
 import Image from "next/image";
 import noImage from "@/assets/images/no-image.jpg";
+import { useContext } from "react";
+import { AuthContext } from "@/providers/auth-provider";
+import { checkoutProduct } from "@/services/products";
+import { useToast } from "@/hooks/useToast";
+import { useDispatch } from "react-redux";
+import { saveItemsInCart } from "@/store/features/cartCheckout/cartCheckoutSlice";
 
 interface ProductCardProps extends Product {}
 
 export const ProductCard = ({ id, name, price, image }: ProductCardProps) => {
-  const saveIncart = async () => {};
+  const { toast } = useToast();
+  const { session } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const saveIncart = async () => {
+    console.log("session", session);
+
+    Promise.resolve(
+      checkoutProduct({
+        userId: session.user?.id ?? 0,
+        products: [
+          {
+            id: id,
+            image: image,
+            name: name,
+            price: price,
+          },
+        ],
+      })
+    )
+      .then((cretedProduct) => {
+        toast({
+          title: "Agregado al carrito",
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   return (
     <Card className="w-full">
       <CardHeader>
@@ -32,11 +65,28 @@ export const ProductCard = ({ id, name, price, image }: ProductCardProps) => {
         <p>${price}</p>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button>Comprar</Button>
+        <Button
+          onClick={() => {
+            saveIncart();
+          }}
+        >
+          Comprar
+        </Button>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button onClick={() => {}}>
+              <Button
+                onClick={() => {
+                  dispatch(
+                    saveItemsInCart({
+                      id,
+                      image,
+                      name,
+                      price,
+                    })
+                  );
+                }}
+              >
                 <ShoppingCart />
               </Button>
             </TooltipTrigger>

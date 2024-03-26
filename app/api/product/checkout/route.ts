@@ -15,27 +15,20 @@ export const POST = async (req: NextRequest) => {
       const price = product.price;
       total += price;
     });
+    const productIds = products.map((product) => ({
+      total,
+      userFk: userId,
+      productFk: product.id,
+    }));
+    console.log("products", productIds);
 
-    const checkoutedProducts = await prisma.checkoutProduct.create({
-      data: {
-        total,
-        userFk: userId,
-        products: {
-          connect: products,
-        },
-      },
-      select: {
-        products: true,
-        user: {
-          select: {
-            id: true,
-            fisrtName: true,
-          },
-        },
-      },
+    const checkoutedProducts = await prisma.checkoutProduct.createMany({
+      data: productIds,
     });
     return Response.json(checkoutedProducts);
   } catch (error) {
+    console.error("error in checkout", error);
+
     return Response.json(
       {
         message: "Internal server error",
